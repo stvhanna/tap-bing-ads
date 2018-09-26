@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.0
+  * Add `ad_extension_detail_report` stream [#27](https://github.com/singer-io/tap-bing-ads/pull/27)
+
+## 1.1.0
+  * Add `audience_performance_report` stream [#26](https://github.com/singer-io/tap-bing-ads/pull/26)
+
+## 1.0.3
+  * Handle AdApiFault in addition to ApiFault
+
+## 1.0.2
+  * Provide suds error messages to the tap so that we can see what went wrong [#21](https://github.com/singer-io/tap-bing-ads/pull/21)
+
+## 1.0.1
+  * Generate proper JSON schema for elements of type `unsignedByte` [#20](https://github.com/singer-io/tap-bing-ads/pull/20)
+
+## 1.0.0
+  * Initial Release to Stitch platform for production
+
 ## 0.4.0
   * Adds checking for stale request IDs [#18](https://github.com/singer-io/tap-bing-ads/pull/18)
   * Updates handling of incremental report downloading to check status and response URL [#19](https://github.com/singer-io/tap-bing-ads/pull/19)

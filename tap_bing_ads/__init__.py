@@ -61,7 +61,14 @@ def log_service_call(service_method):
                    list(map(lambda kv: '{}={}'.format(*kv), kwargs.items()))
         LOGGER.info('Calling: {}({})'.format(service_method.name, ','.join(log_args)))
         with metrics.http_request_timer(service_method.name):
-            return service_method(*args, **kwargs)
+            try:
+                return service_method(*args, **kwargs)
+            except suds.WebFault as e:
+                if hasattr(e.fault.detail, 'ApiFaultDetail'):
+                    raise Exception(e.fault.detail.ApiFaultDetail.OperationErrors) from e
+                if hasattr(e.fault.detail, 'AdApiFaultDetail'):
+                    raise Exception(e.fault.detail.AdApiFaultDetail.Errors) from e
+
     return wrapper
 
 class CustomServiceClient(ServiceClient):
@@ -116,7 +123,7 @@ def xml_to_json_type(xml_type):
         return 'boolean'
     if xml_type in ['decimal', 'float', 'double']:
         return 'number'
-    if xml_type in ['long', 'int']:
+    if xml_type in ['long', 'int', 'unsignedByte']:
         return 'integer'
 
     return 'string'
@@ -475,7 +482,7 @@ def sync_accounts_stream(account_ids, catalog_item):
     accounts_bookmark = singer.get_bookmark(STATE, 'accounts', 'last_record')
     if accounts_bookmark:
         accounts = list(
-            filter(lambda x: x['LastModifiedTime'] >= accounts_bookmark,
+            filter(lambda x: x is not None and x['LastModifiedTime'] >= accounts_bookmark,
                    accounts))
 
     max_accounts_last_modified = max([x['LastModifiedTime'] for x in accounts])
