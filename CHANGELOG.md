@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.2
+  * Update version of `requests` to `2.20.0` in response to CVE 2018-18074
+
+## 2.0.1
+  * Makes tap tolerant of `InvalidCustomDateRangeEnd` errors for reports. The tap will now just move past the ranges that receive this error. [#29](https://github.com/singer-io/tap-bing-ads/pull/29)
+
+## 2.0.0
+  * Adds support for v12 of the Bing API as v11 is sunset as of Oct 31 2018 [#28](https://github.com/singer-io/tap-bing-ads/pull/28)
+
 ## 1.2.0
   * Add `ad_extension_detail_report` stream [#27](https://github.com/singer-io/tap-bing-ads/pull/27)
 
